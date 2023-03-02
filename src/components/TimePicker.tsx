@@ -1,8 +1,8 @@
+import Event from "./Event";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import { EventContext } from "../context/EventContext";
 import { useState, useContext } from "react";
 import { classNames } from "../utils/class";
-import Event from "./Event";
 import {
   add,
   eachDayOfInterval,

@@ -1,7 +1,7 @@
+import uuid from "react-uuid";
 import Modal from "./Modal";
 import { useState, useRef, useContext } from "react";
 import { EventContext } from "../context/EventContext";
-import uuid from "react-uuid";
 import {
   DateSelectArg,
   EventClickArg,
@@ -89,13 +89,14 @@ export default function Calendar() {
         allDay,
       });
 
+      setShowAddEventModal(false);
+
       setEvents((prev: any) => {
         const newEvents = [...prev, formData];
         const jsonEvents = JSON.stringify(newEvents);
         localStorage.setItem("events", jsonEvents);
         return newEvents;
       });
-      setShowAddEventModal(false);
     }
   };
 
@@ -111,10 +112,11 @@ export default function Calendar() {
         (event: any) => event.id !== selectedEvent.id
       );
 
-      setEvents(deleteEvent); // remove the event from the state
-      localStorage.setItem("events", JSON.stringify(deleteEvent));
       setSelectedEvent(null);
       setShowInfoEventModal(false);
+
+      localStorage.setItem("events", JSON.stringify(deleteEvent));
+      setEvents(deleteEvent); // remove the event from the state
     }
   };
 
@@ -134,17 +136,18 @@ export default function Calendar() {
         setShowInfoEventModal(false);
         return {
           ...data,
-          id,
-          title,
-          start,
-          end,
-          allDay,
+          id: selectedEvent.id,
+          title: selectedEvent.title,
+          start: selectedEvent.start.toISOString(),
+          end: selectedEvent.end.toISOString(),
+          allDay: selectedEvent.allDay,
         };
       }
       return data;
     });
 
     localStorage.setItem("events", JSON.stringify(myData));
+    setEvents(myData);
   };
 
   //drop event
@@ -159,8 +162,8 @@ export default function Calendar() {
       }
       return item;
     });
-    localStorage.setItem("events", JSON.stringify(updatedEvents));
 
+    localStorage.setItem("events", JSON.stringify(updatedEvents));
     setEvents(updatedEvents);
   };
 
@@ -181,7 +184,6 @@ export default function Calendar() {
     });
 
     localStorage.setItem("events", JSON.stringify(updatedEvents));
-
     setEvents(updatedEvents);
   };
 
